@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const BASE_URL = "http://localhost:5000/api/products";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL; 
 
 const initialState = {
   products: [],
@@ -18,7 +18,7 @@ export const addProduct = createAsyncThunk(
   "products/addProduct",
   async (productData, { rejectWithValue }) => {
     try {
-      const { data } = await axios.post(`${BASE_URL}`, productData);
+      const { data } = await axios.post(`${BASE_URL}/api/products`, productData);
       return data;
     } catch (error) {
       return rejectWithValue(
@@ -33,7 +33,7 @@ export const getProducts = createAsyncThunk(
   "products/getAll",
   async (_, { rejectWithValue }) => {
     try {
-      const { data } = await axios.get(`${BASE_URL}/all`);
+      const { data } = await axios.get(`${BASE_URL}/api/products/all`);
       return data;
     } catch (error) {
       return rejectWithValue(
@@ -48,7 +48,7 @@ export const getSingleProduct = createAsyncThunk(
   "products/getSingle",
   async (id, { rejectWithValue }) => {
     try {
-      const { data } = await axios.get(`${BASE_URL}/${id}`);
+      const { data } = await axios.get(`${BASE_URL}/api/products/${id}`);
       return data;
     } catch (error) {
       return rejectWithValue(
@@ -63,7 +63,7 @@ export const editProduct = createAsyncThunk(
   "products/editProduct",
   async ({ id, productData }, { rejectWithValue }) => {
     try {
-      const { data } = await axios.put(`${BASE_URL}/${id}`, productData);
+      const { data } = await axios.put(`${BASE_URL}/api/products/${id}`, productData);
       return data;
     } catch (error) {
       return rejectWithValue(
@@ -78,7 +78,7 @@ export const deleteProduct = createAsyncThunk(
   "products/deleteProduct",
   async (id, { rejectWithValue }) => {
     try {
-      const { data } = await axios.delete(`${BASE_URL}/${id}`);
+      const { data } = await axios.delete(`${BASE_URL}/api/products/${id}`);
       return { ...data, id }; // include id for reducer removal
     } catch (error) {
       return rejectWithValue(
@@ -87,6 +87,7 @@ export const deleteProduct = createAsyncThunk(
     }
   }
 );
+
 
 const productSlice = createSlice({
   name: "products",

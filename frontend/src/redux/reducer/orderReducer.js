@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const BASE_URL = "http://localhost:5000/api/orders";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL; 
 
 
 // Create new order
@@ -16,7 +16,7 @@ export const createOrder = createAsyncThunk(
           "Content-Type": "application/json",
         },
       };
-      const { data } = await axios.post(`${BASE_URL}`, orderData, config);
+      const { data } = await axios.post(`${BASE_URL}/api/orders`, orderData, config);
       return data;
     } catch (error) {
       return rejectWithValue(
@@ -36,7 +36,7 @@ export const getMyOrders = createAsyncThunk(
       const config = {
         headers: { Authorization: `Bearer ${token}` },
       };
-      const { data } = await axios.get(`${BASE_URL}`, config);
+      const { data } = await axios.get(`${BASE_URL}/api/orders`, config);
       return data;
     } catch (error) {
       return rejectWithValue(
@@ -53,7 +53,7 @@ export const getOrderDetails = createAsyncThunk(
     try {
       const token = localStorage.getItem("token");
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      const { data } = await axios.get(`${BASE_URL}/${id}`, config);
+      const { data } = await axios.get(`${BASE_URL}/api/orders/${id}`, config);
       return data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || "Failed to fetch order details");
@@ -73,7 +73,7 @@ export const updateOrderStatus = createAsyncThunk(
           "Content-Type": "application/json"
         } 
       };
-      const { data } = await axios.put(`${BASE_URL}/${id}/status`, { status }, config);
+      const { data } = await axios.put(`${BASE_URL}/api/orders/${id}/status`, { status }, config);
       return data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || "Failed to update order status");

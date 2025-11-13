@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const BASE_URL = "http://localhost:5000/api/reviews";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;  
 
 // -------------------- Async Thunks --------------------
 
@@ -10,7 +10,7 @@ export const getReviewsByProduct = createAsyncThunk(
   "reviews/getByProduct",
   async (productId, { rejectWithValue }) => {
     try {
-      const { data } = await axios.get(`${BASE_URL}/${productId}`);
+      const { data } = await axios.get(`${BASE_URL}/api/reviews/${productId}`);
       return data.reviews;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || "Failed to load reviews");
@@ -31,7 +31,7 @@ export const createReview = createAsyncThunk(
         },
       };
       const { data } = await axios.post(
-        `${BASE_URL}/${productId}`,
+        `${BASE_URL}/api/reviews/${productId}`,
         { rating, comment },
         config
       );
@@ -50,7 +50,7 @@ export const deleteReview = createAsyncThunk(
       const config = {
         headers: { Authorization: `Bearer ${token}` },
       };
-      const { data } = await axios.delete(`${BASE_URL}/${reviewId}`, config);
+      const { data } = await axios.delete(`${BASE_URL}/api/reviews/${reviewId}`, config);
       return { reviewId, message: data.message };
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || "Failed to delete review");

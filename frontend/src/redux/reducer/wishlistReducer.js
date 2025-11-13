@@ -2,14 +2,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const BASE_URL = "http://localhost:5000/api/wishlist";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;   "http://localhost:5000/api/wishlist";
 
 // -------------------- Get Wishlist --------------------
 export const getWishlist = createAsyncThunk(
     "wishlist/getWishlist",
     async (_, { rejectWithValue }) => {
         try {
-            const { data } = await axios.get(`${BASE_URL}`, {
+            const { data } = await axios.get(`${BASE_URL}/api/wishlist`, {
                 headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
             });
             return data.products;
@@ -29,7 +29,7 @@ export const addToWishlist = createAsyncThunk(
         try {
             console.log(productId)
             const { data } = await axios.post(
-                `${BASE_URL}/add`, // <-- ensure path matches backend
+                `${BASE_URL}/api/wishlist/add`, // <-- ensure path matches backend
                 { productId },
                 { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
             );

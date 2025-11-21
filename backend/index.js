@@ -10,12 +10,23 @@ const app = express()
 const PORT = process.env.PORT
 
 // cors
-app.use(cors(
-    {
-        origin: process.env.BASE_URL,
-        credentials: true
-    }
-))
+const allowedOrigins = [
+    'http://localhost:5173',
+    'https://clothingwebsite-two.vercel.app'
+];
+
+app.use(cors({
+    origin: function (origin, callback) {
+        if (!origin) return callback(null, true); // mobile apps / curl / server-to-server
+        if (allowedOrigins.indexOf(origin) === -1) {
+            const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    },
+    credentials: true
+}));
+
 
 // json and formdat data middleware
 app.use(express.json())

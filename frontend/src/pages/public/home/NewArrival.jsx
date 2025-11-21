@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-function NewArrival() {
+function NewArrivalSlider() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { products = [] } = useSelector((state) => state.products);
@@ -15,34 +15,36 @@ function NewArrival() {
     dispatch(getProducts());
   }, [dispatch]);
 
-  // ✅ Get 10 newest products
-  const newArrivals = products.slice(10).reverse();
+  // Get 10 newest products
+  const newArrivals = products.slice(-10).reverse();
 
-  const settings = {
-    dots: false,
-    infinite: true,
-    speed: 600,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 2500,
-    responsive: [
-      { breakpoint: 1024, settings: { slidesToShow: 3 } },
-      { breakpoint: 768, settings: { slidesToShow: 2 } },
-      { breakpoint: 480, settings: { slidesToShow: 1 } },
-    ],
-  };
+  // Slick slider settings
+const settings = {
+  dots: false,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 4, // desktop
+  slidesToScroll: 1,
+  autoplay: true,
+  autoplaySpeed: 2500,
+  responsive: [
+    { breakpoint: 1024, settings: { slidesToShow: 3 } },
+    { breakpoint: 768, settings: { slidesToShow: 2 } },
+    { breakpoint: 480, settings: { slidesToShow: 2 } },
+  ],
+};
+
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
+    <div className="max-w-full mx-auto px-2 sm:px-4 py-12">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">
           New Arrivals
         </h2>
         <button
           onClick={() => navigate("/shop")}
-          className="text-pink-600 hover:underline font-semibold"
+          className="text-pink-600 hover:underline font-semibold text-sm sm:text-base"
         >
           See All →
         </button>
@@ -52,21 +54,24 @@ function NewArrival() {
       {newArrivals.length > 0 ? (
         <Slider {...settings}>
           {newArrivals.map((item) => (
-            <div key={item._id} className="px-2">
-              <div onClick={()=> navigate(`/shop/${item._id}`)} className="bg-white shadow-md rounded-lg overflow-hidden group cursor-pointer">
+            <div key={item._id} className="px-1">
+              <div
+                onClick={() => navigate(`/shop/${item._id}`)}
+                className="bg-white shadow-md rounded-lg overflow-hidden cursor-pointer hover:shadow-lg transition h-[250px] sm:h-[280px] md:h-[320px]"
+              >
                 <img
                   src={item.image?.url || item.image || "/placeholder.jpg"}
                   alt={item.name}
-                  className="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-300"
+                  className="w-full h-32 sm:h-40 md:h-48 lg:h-56 object-cover"
                 />
-                <div className="p-4">
-                  <h3 className="font-semibold text-gray-800 truncate">
+                <div className="p-2 sm:p-3">
+                  <h3 className="font-semibold text-gray-800 text-sm sm:text-base md:text-lg truncate">
                     {item.name}
                   </h3>
-                  <p className="text-gray-500 text-sm capitalize">
+                  <p className="text-gray-500 text-xs sm:text-sm capitalize">
                     {item.category}
                   </p>
-                  <p className="text-pink-600 font-bold mt-1">
+                  <p className="text-pink-600 font-bold mt-1 text-sm sm:text-base">
                     ${item.price || "—"}
                   </p>
                 </div>
@@ -75,7 +80,7 @@ function NewArrival() {
           ))}
         </Slider>
       ) : (
-        <p className="text-gray-500 text-center mt-8">
+        <p className="text-gray-500 text-center mt-8 text-sm sm:text-base">
           No new arrivals available.
         </p>
       )}
@@ -83,4 +88,5 @@ function NewArrival() {
   );
 }
 
-export default NewArrival;
+export default NewArrivalSlider;
+

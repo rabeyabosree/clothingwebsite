@@ -12,7 +12,7 @@ const PORT = process.env.PORT
 // cors
 const allowedOrigins = [
     'http://localhost:5173',
-    'https://clothingwebsite-two.vercel.app'
+    'https://clothingwebsite-fa2lo61r4-rabeyabosrees-projects.vercel.app'
 ];
 
 app.use(cors({
